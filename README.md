@@ -1,0 +1,1 @@
+https://laracasts.com/series/vue-state-management
