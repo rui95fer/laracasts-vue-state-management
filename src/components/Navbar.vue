@@ -1,5 +1,14 @@
 <script setup lang="ts">
 import { ShoppingCartIcon } from '@heroicons/vue/24/outline';
+import { computed, inject } from 'vue';
+
+const { cart } = inject('cart');
+
+const amount = computed(() => {
+  return cart.value.reduce((acc: number, product: { quantity?: number }) => {
+    return acc + (product.quantity ?? 0);
+  }, 0);
+});
 </script>
 
 <template>
@@ -16,6 +25,12 @@ import { ShoppingCartIcon } from '@heroicons/vue/24/outline';
               <span class="absolute -inset-1.5" />
               <span class="sr-only">View cart</span>
               <ShoppingCartIcon class="size-6" aria-hidden="true" />
+              <span
+                v-if="amount > 0"
+                class="ml-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-indigo-600 rounded-full"
+              >
+                {{ amount }}
+              </span>
             </button>
           </div>
         </div>

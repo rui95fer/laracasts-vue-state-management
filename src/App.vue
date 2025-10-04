@@ -1,20 +1,28 @@
 <script setup lang="ts">
 import Navbar from '@/components/Navbar.vue';
 import ProductCard from '@/components/ProductCard.vue';
-import { ref } from 'vue';
+import { provide, ref } from 'vue';
 import CartOverlay from '@/components/CartOverlay.vue';
 
-const cartOverlayOpen = ref(false);
-const cart = ref([]);
+interface Product {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  quantity?: number;
+}
 
-const removeProduct = (product) => {
+const cart = ref<Product[]>([]);
+const cartOverlayOpen = ref(false);
+
+const removeProduct = (product: Product) => {
   cart.value = cart.value.filter((value) => value.id !== product.id);
 };
 
-const incrementProduct = (product) => {
+const incrementProduct = (product: Product) => {
   const foundValue = cart.value.find((value) => value.id === product.id);
   if (foundValue) {
-    foundValue.quantity++;
+    foundValue.quantity = (foundValue.quantity ?? 1) + 1;
   } else {
     cart.value.push({
       ...product,
@@ -24,17 +32,17 @@ const incrementProduct = (product) => {
   console.log(cart.value);
 };
 
-const decrementProduct = (product) => {
+const decrementProduct = (product: Product) => {
   const foundValue = cart.value.find((value) => value.id === product.id);
   if (foundValue) {
-    foundValue.quantity -= 1;
+    foundValue.quantity = (foundValue.quantity ?? 1) - 1;
     if (foundValue.quantity <= 0) {
       cart.value = cart.value.filter((value) => value.id !== product.id);
     }
   }
 };
 
-const products = [
+const products: Product[] = [
   {
     id: 1,
     title: 'Pizza',
@@ -76,25 +84,25 @@ const products = [
     price: 12.95,
   },
 ];
+
+provide('cart', {
+  cart,
+  removeProduct,
+  incrementProduct,
+  decrementProduct
+});
 </script>
 
 <template>
   <div>
     <Navbar @cart-clicked="cartOverlayOpen = true" />
     <CartOverlay
-      @increment="incrementProduct"
-      @decrement="decrementProduct"
-      @remove="removeProduct"
-      :cart="cart"
       :open="cartOverlayOpen"
       @close="cartOverlayOpen = false"
     />
     <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 mt-4">
       <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         <ProductCard
-          :cart="cart"
-          @increment="incrementProduct"
-          @decrement="decrementProduct"
           :key="product.id"
           v-for="product in products"
           :product="product"

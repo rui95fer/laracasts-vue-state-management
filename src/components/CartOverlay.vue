@@ -8,19 +8,17 @@ import {
   TransitionRoot,
 } from '@headlessui/vue';
 import Cart from '@/components/Cart.vue';
-import { computed } from 'vue';
+import { computed, inject } from 'vue';
 import { format } from '@/lib/number.js';
 
-const props = defineProps({
-  cart: {
-    type: Array,
-    required: true,
-  },
+const { cart } = inject('cart');
+
+defineProps({
   open: Boolean,
 });
 
 const subtotal = computed(() => {
-  const subtotal = props.cart.reduce(
+  const subtotal = cart.value.reduce(
     (total, product) => total + product.price * product.quantity,
     0
   );
@@ -81,12 +79,7 @@ const subtotal = computed(() => {
 
                     <div class="mt-8">
                       <div class="flow-root">
-                        <Cart
-                          @increment="$emit('increment', $event)"
-                          @decrement="$emit('decrement', $event)"
-                          @remove="$emit('remove', $event)"
-                          :cart="cart"
-                        />
+                        <Cart />
                       </div>
                     </div>
                   </div>
