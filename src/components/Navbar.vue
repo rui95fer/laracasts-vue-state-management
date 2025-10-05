@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ShoppingCartIcon } from '@heroicons/vue/24/outline';
-import { computed, inject } from 'vue';
+import { computed } from 'vue';
+import { useCart } from '@/composables/cart.ts';
 
-const { cart } = inject('cart');
+const { cart } = useCart();
 
 const amount = computed(() => {
   return cart.value.reduce((acc: number, product: { quantity?: number }) => {

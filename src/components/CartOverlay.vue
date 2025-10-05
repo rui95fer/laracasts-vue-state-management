@@ -8,21 +8,13 @@ import {
   TransitionRoot,
 } from '@headlessui/vue';
 import Cart from '@/components/Cart.vue';
-import { computed, inject } from 'vue';
-import { format } from '@/lib/number.js';
+import { useCart } from '@/composables/cart.ts';
+import { format } from '@/lib/number.ts';
 
-const { cart } = inject('cart');
+const { subtotal } = useCart();
 
 defineProps({
   open: Boolean,
-});
-
-const subtotal = computed(() => {
-  const subtotal = cart.value.reduce(
-    (total, product) => total + product.price * product.quantity,
-    0
-  );
-  return format(subtotal);
 });
 </script>
 
@@ -89,17 +81,18 @@ const subtotal = computed(() => {
                       class="flex justify-between text-base font-medium text-gray-900"
                     >
                       <p>Subtotal</p>
-                      <p>{{ subtotal }}</p>
+                      <p>{{ format(subtotal) }}</p>
                     </div>
                     <p class="mt-0.5 text-sm text-gray-500">
                       Shipping and taxes calculated at checkout.
                     </p>
                     <div class="mt-6">
-                      <a
-                        href="#"
+                      <RouterLink
+                        to="/checkout"
                         class="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
-                        >Checkout</a
                       >
+                        Checkout
+                      </RouterLink>
                     </div>
                     <div
                       class="mt-6 flex justify-center text-center text-sm text-gray-500"

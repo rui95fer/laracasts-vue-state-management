@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import CartRow from '@/components/CartRow.vue';
-import { inject } from 'vue';
+import { useCart } from '@/composables/cart.ts';
 
-const { cart, incrementProduct, decrementProduct, removeProduct } =
-  inject('cart');
+const { cart, incrementProduct, decrementProduct, removeProduct } = useCart()
 </script>
 
 <template>
