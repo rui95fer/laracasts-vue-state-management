@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import { ShoppingCartIcon } from '@heroicons/vue/24/outline';
 import { computed } from 'vue';
-import { useCart } from '@/composables/cart.ts';
+import { useCartStore } from '@/stores/Cart.ts';
 
-const { cart } = useCart();
+const cartStore = useCartStore();
 
 const amount = computed(() => {
-  return cart.value.reduce((acc: number, product: { quantity?: number }) => {
-    return acc + (product.quantity ?? 0);
-  }, 0);
+  return cartStore.cart.reduce(
+    (acc: number, product: { quantity?: number }) => {
+      return acc + (product.quantity ?? 0);
+    },
+    0
+  );
 });
 </script>
 

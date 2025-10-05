@@ -8,10 +8,10 @@ import {
   TransitionRoot,
 } from '@headlessui/vue';
 import Cart from '@/components/Cart.vue';
-import { useCart } from '@/composables/cart.ts';
 import { format } from '@/lib/number.ts';
+import { useCartStore } from '@/stores/Cart.ts';
 
-const { subtotal } = useCart();
+const cartStore = useCartStore();
 
 defineProps({
   open: Boolean,
@@ -81,7 +81,7 @@ defineProps({
                       class="flex justify-between text-base font-medium text-gray-900"
                     >
                       <p>Subtotal</p>
-                      <p>{{ format(subtotal) }}</p>
+                      <p>{{ format(cartStore.subtotal) }}</p>
                     </div>
                     <p class="mt-0.5 text-sm text-gray-500">
                       Shipping and taxes calculated at checkout.

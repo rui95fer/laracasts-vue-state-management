@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import Cart from '@/components/Cart.vue';
 import { format } from '@/lib/number.ts';
-import { useCart } from '@/composables/cart.ts';
 import router from '@/router';
+import { useCartStore } from '@/stores/Cart.ts';
 
-const { subtotal, taxes, total, clearCart } = useCart();
+const cartStore = useCartStore();
 
 function handleCheckout() {
-  clearCart();
+  alert('This is a demo store. No payment will be processed.');
+  cartStore.clearCart();
   router.push('/');
 }
 </script>
@@ -22,20 +23,20 @@ function handleCheckout() {
     <div class="mt-8 p-6 bg-gray-50 rounded shadow-sm">
       <div class="flex justify-between items-center mb-2">
         <span class="text-lg font-semibold">Subtotal:</span>
-        <span class="text-lg">{{ format(subtotal) }}</span>
+        <span class="text-lg">{{ format(cartStore.subtotal) }}</span>
       </div>
       <div class="flex justify-between items-center mb-2">
         <span class="text-base text-gray-600">Taxes (10%):</span>
-        <span class="text-base text-gray-600">{{ format(taxes) }}</span>
+        <span class="text-base text-gray-600">{{ format(cartStore.taxes) }}</span>
       </div>
       <div class="flex justify-between items-center border-t pt-4 mt-4">
         <span class="text-xl font-bold">Total:</span>
-        <span class="text-xl font-bold text-blue-700">{{ format(total) }}</span>
+        <span class="text-xl font-bold text-blue-700">{{ format(cartStore.total) }}</span>
       </div>
     </div>
     <button
       class="w-full mt-6 py-3 bg-blue-600 text-white font-bold rounded disabled:opacity-50"
-      :disabled="subtotal === 0"
+      :disabled="cartStore.subtotal === 0"
       @click="handleCheckout"
     >
       Proceed to Payment
