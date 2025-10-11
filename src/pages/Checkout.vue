@@ -3,8 +3,11 @@ import Cart from '@/components/Cart.vue';
 import { format } from '@/lib/number.ts';
 import router from '@/router';
 import { useCartStore } from '@/stores/Cart.ts';
+import ProductGrid from '@/components/ProductGrid.vue';
+import { useProductsStore } from '@/stores/Products.ts';
 
 const cartStore = useCartStore();
+const productsStore = useProductsStore();
 
 function handleCheckout() {
   alert('This is a demo store. No payment will be processed.');
@@ -27,13 +30,23 @@ function handleCheckout() {
       </div>
       <div class="flex justify-between items-center mb-2">
         <span class="text-base text-gray-600">Taxes (10%):</span>
-        <span class="text-base text-gray-600">{{ format(cartStore.taxes) }}</span>
+        <span class="text-base text-gray-600">{{
+          format(cartStore.taxes)
+        }}</span>
       </div>
       <div class="flex justify-between items-center border-t pt-4 mt-4">
         <span class="text-xl font-bold">Total:</span>
-        <span class="text-xl font-bold text-blue-700">{{ format(cartStore.total) }}</span>
+        <span class="text-xl font-bold text-blue-700">{{
+          format(cartStore.total)
+        }}</span>
       </div>
     </div>
+    <h2 class="text-xl font-bold mt-12 mb-4">You might also like</h2>
+    <ProductGrid
+      class="mt-12"
+      :products="productsStore.upsellingProducts"
+      :loading="productsStore.loading"
+    />
     <button
       class="w-full mt-6 py-3 bg-blue-600 text-white font-bold rounded disabled:opacity-50"
       :disabled="cartStore.subtotal === 0"

@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { computed, ref, watch } from 'vue';
 import type { Product } from '@/types/Product.ts';
 
-export const useCartStore = defineStore('useCart', () => {
+export const useCartStore = defineStore('cart', () => {
   const cart = ref<Product[]>([]);
 
   const removeProduct = (product: Product) => {
@@ -11,7 +11,7 @@ export const useCartStore = defineStore('useCart', () => {
 
   const clearCart = () => {
     cart.value = [];
-  }
+  };
 
   const incrementProduct = (product: Product) => {
     const foundValue = cart.value.find((value) => value.id === product.id);
@@ -38,7 +38,7 @@ export const useCartStore = defineStore('useCart', () => {
 
   const subtotal = computed(() => {
     const subtotal = cart.value.reduce((acc, product) => {
-      return acc + (product.price * (product.quantity ?? 1));
+      return acc + product.price * (product.quantity ?? 1);
     }, 0);
 
     return Math.round(subtotal * 100) / 100;
@@ -58,7 +58,7 @@ export const useCartStore = defineStore('useCart', () => {
       localStorage.setItem('cart', JSON.stringify(cart.value));
     },
     { deep: true }
-  )
+  );
 
   const savedCart = localStorage.getItem('cart');
 
@@ -66,11 +66,17 @@ export const useCartStore = defineStore('useCart', () => {
     cart.value = JSON.parse(savedCart);
   }
 
+  const amountForProduct = (product: Product) => {
+    const foundValue = cart.value.find((value) => value.id === product.id);
+    return foundValue?.quantity ?? 0;
+  };
+
   return {
     cart,
     subtotal,
     taxes,
     total,
+    amountForProduct,
     clearCart,
     removeProduct,
     incrementProduct,

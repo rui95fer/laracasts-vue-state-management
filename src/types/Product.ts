@@ -1,7 +1,9 @@
 export interface Product {
   id: number;
   title: string;
-  description: string;
   price: number;
-  quantity?: number;
+  description: string;
+  use_for_upselling: boolean;
+  created_at: string;
+  updated_at: string;
 }
